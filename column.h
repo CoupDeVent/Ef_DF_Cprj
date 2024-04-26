@@ -9,7 +9,7 @@ typedef struct{
 } COLUMN;
 
 COLUMN *create_column(char* title);
-void add_value_to_column(COLUMN* column, int value);
+int insert_value(COLUMN* column, int value);
 void delete_column(COLUMN* column);
 int get_logical_size(COLUMN* column);
 int get_value_at_index(COLUMN* column, int index);
