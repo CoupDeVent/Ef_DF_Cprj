@@ -82,8 +82,76 @@ void print_column(COLUMN* column){
     * @param: Pointer to a column
     */
 
+    printf("%s", column->title);
     for(int i = 0; i < column->logical_size; i++){
         printf("%d. [ %d ]\n", i, column->data[i]);
     }
 }
 
+int number_occurence(COLUMN* column, int value){
+    /**
+    * @brief: count occurence of a value
+    * @param1: Pointer to a column
+    * @param2: value
+    * return: return occurence value
+    */
+
+    int occurence = 0;
+
+    for(int i = 0; i < column->logical_size; i++){
+        if(column->data[i] == value){
+            occurence++;
+        }
+    }
+    return occurence;
+}
+
+int value_at_position_x(COLUMN* column, int x){
+    /**
+    * @brief: take the value at the index x
+    * @param1: Pointer to a column
+    * @param2: index
+    * return: return value at the index x or return -1 if the index is bigger than the logical size
+    */
+
+    if(x < column->logical_size){
+        return column->data[x];
+    }
+    return -1;
+}
+
+int number_value_bigger(COLUMN* column, int x){
+    /**
+    * @brief: count occurence of the value bigger than x
+    * @param1: Pointer to a column
+    * @param2: x
+    * return: return occurence value bigger than x
+    */
+
+    int occurence = 0;
+
+    for(int i = 0; i < column->logical_size; i++){
+        if(column->data[i] > x){
+            occurence++;
+        }
+    }
+    return occurence;
+}
+
+int number_value_lower(COLUMN* column, int x){
+    /**
+    * @brief: count occurence of the value lower than x
+    * @param1: Pointer to a column
+    * @param2: x
+    * return: return occurence value lower than x
+    */
+
+    int occurence = 0;
+
+    for(int i = 0; i < column->logical_size; i++){
+        if(column->data[i] < x){
+            occurence++;
+        }
+    }
+    return occurence;
+}
