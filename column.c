@@ -82,7 +82,7 @@ void print_column(COLUMN* column){
     * @param: Pointer to a column
     */
 
-    printf("%s", column->title);
+    printf("%s :\n", column->title);
     for(int i = 0; i < column->logical_size; i++){
         printf("%d. [ %d ]\n", i, column->data[i]);
     }

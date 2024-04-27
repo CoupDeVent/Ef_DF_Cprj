@@ -19,18 +19,18 @@ void fill_df_user(CDATAFRAME* cdataframe){
 
     printf("\nHow many collumn do you want ?\n");
     scanf("%d", &number_column);
+    cdataframe->columns = (COLUMN*)realloc(cdataframe->columns, number_column * sizeof(COLUMN));
 
     for(int i = 0; i < number_column; i++){
         printf("\nWrite the title of the collumn %d\n", i);
         scanf("%s", title);
-        cdataframe->columns = (COLUMN*)malloc(number_column * sizeof(COLUMN));
         cdataframe->columns[i] = create_column(title);
         cdataframe->num_columns += 1;
 
         printf("How many value do you want in your collumn ?\n");
         scanf("%d", &number_value_collumn);
         for(int k = 0; k < number_value_collumn; k++){
-            printf("Enter the value %d : ", k);
+            printf("Enter the value %d :", k);
             scanf("%d", &value);
             insert_value(cdataframe->columns[i], value);
             cdataframe->columns[i]->logical_size += 1;
