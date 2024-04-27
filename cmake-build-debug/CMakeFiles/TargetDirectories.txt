@@ -1,3 +1,0 @@
-C:/GitHub/Projet-de-programmation-C/cmake-build-debug/CMakeFiles/Projet_de_programmation_C.dir
-C:/GitHub/Projet-de-programmation-C/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/GitHub/Projet-de-programmation-C/cmake-build-debug/CMakeFiles/rebuild_cache.dir
