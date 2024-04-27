@@ -40,6 +40,6 @@ void fill_df_user(CDATAFRAME* cdataframe){
 
 void print_df(CDATAFRAME* cdataframe){
     for(int i = 0; i < cdataframe->num_columns; i++){
-        print_column(cdataframe->columns[i]); //force
+        print_column(cdataframe->columns[i]);
     }
 }
