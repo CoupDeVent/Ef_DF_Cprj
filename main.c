@@ -32,7 +32,8 @@ int main(){
 
     CDATAFRAME *cdataframe = create_cdataframe();
 
-    fill_df_user(cdataframe);
+    //fill_df_user(cdataframe);
+    fill_df_hard(cdataframe);
 
     print_df(cdataframe);
 

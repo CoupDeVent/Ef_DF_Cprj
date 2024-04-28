@@ -38,6 +38,23 @@ void fill_df_user(CDATAFRAME* cdataframe){
     }
 }
 
+void fill_df_hard(CDATAFRAME* cdataframe){
+    char title = {'a', 'b', 'c'};
+
+    cdataframe->columns = (COLUMN*)realloc(cdataframe->columns, 3 * sizeof(COLUMN));
+
+    for(int i = 0; i < 3; i++){
+        cdataframe->columns[i] = create_column(title[i]);
+        cdataframe->num_columns += 1;
+
+        for(int k = 0; k < 5; k++){
+            insert_value(cdataframe->columns[i], k);
+            cdataframe->columns[i]->logical_size += 1;
+        }
+    }
+
+}
+
 void print_df(CDATAFRAME* cdataframe){
     for(int i = 0; i < cdataframe->num_columns; i++){
         print_column(cdataframe->columns[i]);

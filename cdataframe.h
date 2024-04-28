@@ -11,7 +11,7 @@ typedef struct{
 
 CDATAFRAME * create_cdataframe();
 void fill_df_user(CDATAFRAME* cdataframe);
-void fill_df_hard(CDATAFRAME* dataframe);
+void fill_df_hard(CDATAFRAME* cdataframe);
 
 void print_df(CDATAFRAME* cdataframe);
 void print_partial_rows(CDATAFRAME* cdataframe, int limit);
