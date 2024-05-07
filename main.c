@@ -29,13 +29,23 @@ int main(){
     delete_column(col1);
     */
 
+
     CDATAFRAME *cdataframe = create_cdataframe();
 
-    fill_df_user(cdataframe);
+    //fill_df_user(cdataframe);
+    fill_df_hard(cdataframe);
 
+    print_df(cdataframe);
+    //print_partial_columns(cdataframe, 1);
+    //print_partial_rows(cdataframe, 2);
+
+    add_row_df(cdataframe);
+    print_df(cdataframe);
+    delete_row_df(cdataframe);
     print_df(cdataframe);
 
     return 0;
 }
 
 // Faire les saisies sécurisé
+// orga code
