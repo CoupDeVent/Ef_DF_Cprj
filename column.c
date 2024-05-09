@@ -7,24 +7,25 @@
 #define REALOC_SIZE 256
 
 
-COLUMN* create_column(char* title){
+COLUMN *create_column(ENUM_TYPE type, char *title){
     /**
-    * Create a column
-    * @param1 : Column title
-    * @return : Pointer to created column
-    */
-
+     * Create a new column
+     * @param1 : Column type
+     * @param2 : Column title
+     * @return : Pointer to the created column
+     */
     COLUMN* new_column = (COLUMN*)malloc(sizeof(COLUMN));
 
     new_column->title = strdup(title);
     new_column->data = NULL;
-    new_column->logical_size = 0;
-    new_column->physical_size = 0;
+    new_column->size = 0;
+    new_column->max_size = 0;
+    new_column->column_type = type;
 
     return new_column;
 }
 
-int insert_value(COLUMN* column, int value){
+int insert_value(COLUMN* column, void *value){
     /**
     * @brief : Add a new value to a column
     * @param1 : Pointer to a column
@@ -32,48 +33,70 @@ int insert_value(COLUMN* column, int value){
     * @return : 1 if the value is added 0 otherwise
     */
 
-    if(column->physical_size == 0){
-        column->logical_size = 1;
-        column->physical_size = REALOC_SIZE;
+    if(column->max_size == 0){
+        column->max_size = REALOC_SIZE;
 
-        column->data = (int *)malloc(column->physical_size* sizeof(int));
+        column->data = (COL_TYPE *)malloc(column->max_size* sizeof(COL_TYPE));
         if(column->data == NULL){
             return 0; // Echec allocation mémoire
         }
-        column->data[0] = value;
-
-        return 1;
     }
-    else if(column->logical_size >= column->physical_size){
-        column->logical_size += 1;
-        column->physical_size += REALOC_SIZE;
+    else if(column->size >= column->max_size){
+        column->max_size += REALOC_SIZE;
 
-        column->data = (int*)realloc(column->data, column->physical_size* sizeof(int));
-        if(column->data == NULL){
+        column->data = (COL_TYPE *)realloc(column->data, column->max_size* sizeof(COL_TYPE));
+        if(column->data == NULL || column->data == REALOC_SIZE){
             return 0; // Echec allocation mémoire
         }
-        column->data[column->logical_size - 1] = value;
-
-        return 1;
     }
-    else{
-        column->logical_size += 1;
 
-        column->data[column->logical_size - 1] = value;
-
-        return 1;
+    switch(column->column_type){
+        case UINT:
+            column->data[column->size] = (unsigned int*)malloc(sizeof(unsigned int));
+            *((unsigned int*)column->data[column->size]) = *((unsigned int*)value);
+            break;
+        case INT:
+            column->data[column->size] = (int*)malloc(sizeof(int));
+            *((int*)column->data[column->size]) = *((int*)value);
+            break;
+        case CHAR:
+            column->data[column->size] = (char*)malloc(sizeof(char));
+            *((char*)column->data[column->size]) = *((char*)value);
+            break;
+        case FLOAT:
+            column->data[column->size] = (float*)malloc(sizeof(float));
+            *((float*)column->data[column->size]) = *((float*)value);
+            break;
+        case DOUBLE:
+            column->data[column->size] = (double*)malloc(sizeof(double));
+            *((double*)column->data[column->size]) = *((double*)value);
+            break;
+        case STRING:
+            column->data[column->size] = malloc((strlen(value) + 1) * sizeof(char));
+            strcpy((char*)column->data[column->size], (char*)value);
+            break;
     }
+    column->size++;
+    return 1;
 }
 
-void delete_column(COLUMN* column){
+void delete_column(COLUMN **column){
     /**
     * @brief : Free allocated memory
-    * @param1 : Pointer to a column
+    * @param1 : Pointer to the column
     */
 
-    free(column->data);
-    free(column->title);
-    free(column);
+    free((*column)->title);
+    for(int i = 0; i < (*column)->max_size; i++){
+        free((*column)->data[i]);
+    }
+    free((*column)->data);
+    free((*column)->index);
+    free(*column);
+}
+
+void convert_value(COLUMN *col, unsigned long long int i, char *str, int size){
+        
 }
 
 void print_column(COLUMN* column){
