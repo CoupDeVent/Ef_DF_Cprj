@@ -4,6 +4,7 @@
 
 #include "cdataframe.h"
 
+
 CDATAFRAME * create_cdataframe(){
     CDATAFRAME* new_cdataframe = (CDATAFRAME*)malloc(sizeof(CDATAFRAME));
 
@@ -69,12 +70,12 @@ void print_partial_rows(CDATAFRAME* cdataframe, int limit){
     int temp;
 
     for(int i = 0; i < cdataframe->num_columns; i++){
-        temp = cdataframe->columns[i]->logical_size;
-        cdataframe->columns[i]->logical_size = limit;
+        temp = cdataframe->columns[i]->size;
+        cdataframe->columns[i]->size = limit;
 
         print_column(cdataframe->columns[i]);
 
-        cdataframe->columns[i]->logical_size = temp;
+        cdataframe->columns[i]->size = temp;
     }
 }
 
@@ -87,8 +88,8 @@ void add_row_df(CDATAFRAME* cdataframe, int column_index){
 }
 
 void delete_row_df(CDATAFRAME* cdataframe, int column_index){
-    cdataframe->columns[column_index]->data[cdataframe->columns[column_index]->logical_size] = NULL;
-    cdataframe->columns[column_index]->logical_size -= 1;
+    cdataframe->columns[column_index]->data[cdataframe->columns[column_index]->size] = NULL;
+    cdataframe->columns[column_index]->size -= 1;
 }
 
 void add_column_df(CDATAFRAME* cdataframe, char* title){
@@ -107,7 +108,7 @@ void rename_column(CDATAFRAME* cdataframe, int column_index, char* new_title){
 
 bool search_value_df(CDATAFRAME* cdataframe, int value){
     for(int i = 0; i < cdataframe->num_columns; i++){
-        for(int k = 0; k < cdataframe->columns[i]->logical_size; k++){
+        for(int k = 0; k < cdataframe->columns[i]->size; k++){
             if(cdataframe->columns[i]->data[k] == value){
                 return true;
             }
@@ -131,7 +132,7 @@ void print_column_title(CDATAFRAME* cdataframe){
 }
 
 int count_rows(CDATAFRAME* cdataframe, int column_index){
-    return cdataframe->columns[column_index]->logical_size;
+    return cdataframe->columns[column_index]->size;
 }
 
 int count_columns(CDATAFRAME* cdataframe){
@@ -142,7 +143,7 @@ int count_cells_equal_to(CDATAFRAME* cdataframe, int value){
     int count = 0;
 
     for(int i = 0; i < cdataframe->num_columns; i++){
-        for(int k = 0; k < cdataframe->columns[i]->logical_size; k++){
+        for(int k = 0; k < cdataframe->columns[i]->size; k++){
             if(cdataframe->columns[i]->data[k] == value){
                 count += 1;
             }

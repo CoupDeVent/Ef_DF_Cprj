@@ -39,5 +39,6 @@ int number_occurence(COLUMN* column, int value);
 int value_at_position_x(COLUMN* column, int x);
 int number_value_bigger(COLUMN* column, int x);
 int number_value_lower(COLUMN* column, int x);
+int number_value_equal(COLUMN* column, int x);
 
 #endif

@@ -5,8 +5,16 @@
 
 int main(){
 
+    COLUMN *mycol = create_column(CHAR, "Column 1");
+    char a = 'A', c = 'C';
+    insert_value(mycol, &a);
+    insert_value(mycol, NULL);
+    insert_value(mycol, &c);
+    print_column(mycol);
+
+
     /*
-    COLUMN *col1 = create_column("My column 1");
+    COLUMN *col1 = create_column(INT, "My column 1");
 
     insert_value(col1, 2);
     insert_value(col1, 10);
@@ -16,6 +24,8 @@ int main(){
     insert_value(col1, 2);
 
     print_column(col1);
+
+    delete_column(col1);
 
     printf("\n- nb oc 2 : %d\n", number_occurence(col1, 2));
     printf("- nb oc 650 : %d\n", number_occurence(col1, 650));
@@ -29,7 +39,7 @@ int main(){
     delete_column(col1);
     */
 
-
+    /*
     CDATAFRAME *cdataframe = create_cdataframe();
 
     //fill_df_user(cdataframe);
@@ -43,6 +53,7 @@ int main(){
     print_df(cdataframe);
     delete_row_df(cdataframe);
     print_df(cdataframe);
+    */
 
     return 0;
 }

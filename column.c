@@ -32,49 +32,45 @@ int insert_value(COLUMN* column, void *value){
     * @param2 : The value to be added
     * @return : 1 if the value is added 0 otherwise
     */
+    if(column->size >= column->max_size){
+        column->max_size += REALOC_SIZE;
 
-    if(column->max_size == 0){
-        column->max_size = REALOC_SIZE;
-
-        column->data = (COL_TYPE *)malloc(column->max_size* sizeof(COL_TYPE));
+        column->data = (COL_TYPE **)realloc(column->data, column->max_size * sizeof(COL_TYPE*));
         if(column->data == NULL){
             return 0; // Echec allocation mémoire
         }
     }
-    else if(column->size >= column->max_size){
-        column->max_size += REALOC_SIZE;
 
-        column->data = (COL_TYPE *)realloc(column->data, column->max_size* sizeof(COL_TYPE));
-        if(column->data == NULL || column->data == REALOC_SIZE){
-            return 0; // Echec allocation mémoire
-        }
+    if(value == NULL){
+        column->data[column->size] = NULL;
     }
-
-    switch(column->column_type){
-        case UINT:
-            column->data[column->size] = (unsigned int*)malloc(sizeof(unsigned int));
-            *((unsigned int*)column->data[column->size]) = *((unsigned int*)value);
-            break;
-        case INT:
-            column->data[column->size] = (int*)malloc(sizeof(int));
-            *((int*)column->data[column->size]) = *((int*)value);
-            break;
-        case CHAR:
-            column->data[column->size] = (char*)malloc(sizeof(char));
-            *((char*)column->data[column->size]) = *((char*)value);
-            break;
-        case FLOAT:
-            column->data[column->size] = (float*)malloc(sizeof(float));
-            *((float*)column->data[column->size]) = *((float*)value);
-            break;
-        case DOUBLE:
-            column->data[column->size] = (double*)malloc(sizeof(double));
-            *((double*)column->data[column->size]) = *((double*)value);
-            break;
-        case STRING:
-            column->data[column->size] = malloc((strlen(value) + 1) * sizeof(char));
-            strcpy((char*)column->data[column->size], (char*)value);
-            break;
+    else{
+        switch(column->column_type){
+            case UINT:
+                column->data[column->size] = (unsigned int*)malloc(sizeof(unsigned int));
+                *((unsigned int*)column->data[column->size]) = *((unsigned int*)value);
+                break;
+            case INT:
+                column->data[column->size] = (int*)malloc(sizeof(int));
+                *((int*)column->data[column->size]) = *((int*)value);
+                break;
+            case CHAR:
+                column->data[column->size] = (char*)malloc(sizeof(char));
+                *((char*)column->data[column->size]) = *((char*)value);
+                break;
+            case FLOAT:
+                column->data[column->size] = (float*)malloc(sizeof(float));
+                *((float*)column->data[column->size]) = *((float*)value);
+                break;
+            case DOUBLE:
+                column->data[column->size] = (double*)malloc(sizeof(double));
+                *((double*)column->data[column->size]) = *((double*)value);
+                break;
+            case STRING:
+                column->data[column->size] = malloc((strlen(value) + 1) * sizeof(char));
+                strcpy((char*)column->data[column->size], (char*)value);
+                break;
+        }
     }
     column->size++;
     return 1;
@@ -91,12 +87,28 @@ void delete_column(COLUMN **column){
         free((*column)->data[i]);
     }
     free((*column)->data);
-    free((*column)->index);
+    //free((*column)->index);
     free(*column);
 }
 
-void convert_value(COLUMN *col, unsigned long long int i, char *str, int size){
-        
+void convert_value(COLUMN *column, unsigned long long int i, char *str, int size){
+    switch(column->column_type){
+        case UINT:
+            snprintf(str, size, "%u", *((unsigned int*)column->data[i]));
+            break;
+        case INT:
+            snprintf(str, size, "%d", *((int*)column->data[i]));
+            break;
+        case FLOAT:
+            snprintf(str, size, "%f", *((float*)column->data[i]));
+            break;
+        case DOUBLE:
+            snprintf(str, size, "%lf", *((double*)column->data[i]));
+            break;
+        case CHAR:
+            snprintf(str, size, "%c", *((char*)column->data[i]));
+            break;
+    }
 }
 
 void print_column(COLUMN* column){
@@ -104,10 +116,17 @@ void print_column(COLUMN* column){
     * @brief: Print a column content
     * @param: Pointer to a column
     */
+    char str[256];
 
     printf("%s :\n", column->title);
-    for(int i = 0; i < column->logical_size; i++){
-        printf("%d. [ %d ]\n", i, column->data[i]);
+    for(int i = 0; i < column->size; i++){
+        if(column->data[i] == NULL) {
+            printf("%d. [NULL]\n", i);
+        }
+        else{
+            convert_value(column, i, str, 256);
+            printf("%d. [ %s ]\n", i, str);
+        }
     }
 }
 
@@ -121,7 +140,7 @@ int number_occurence(COLUMN* column, int value){
 
     int occurence = 0;
 
-    for(int i = 0; i < column->logical_size; i++){
+    for(int i = 0; i < column->size; i++){
         if(column->data[i] == value){
             occurence++;
         }
@@ -137,7 +156,7 @@ int value_at_position_x(COLUMN* column, int x){
     * return: return value at the index x or return -1 if the index is bigger than the logical size
     */
 
-    if(x < column->logical_size){
+    if(x < column->size){
         return column->data[x];
     }
     return -1;
@@ -153,7 +172,7 @@ int number_value_bigger(COLUMN* column, int x){
 
     int occurence = 0;
 
-    for(int i = 0; i < column->logical_size; i++){
+    for(int i = 0; i < column->size; i++){
         if(column->data[i] > x){
             occurence++;
         }
@@ -171,7 +190,7 @@ int number_value_lower(COLUMN* column, int x){
 
     int occurence = 0;
 
-    for(int i = 0; i < column->logical_size; i++){
+    for(int i = 0; i < column->size; i++){
         if(column->data[i] < x){
             occurence++;
         }
