@@ -35,7 +35,7 @@ void delete_column(COLUMN **column);
 void convert_value(COLUMN *col, unsigned long long int i, char *str, int size);
 void print_column(COLUMN* column);
 
-int number_occurence(COLUMN* column, int value);
+int number_occurence(COLUMN* column, void* value);
 int value_at_position_x(COLUMN* column, int x);
 int number_value_bigger(COLUMN* column, int x);
 int number_value_lower(COLUMN* column, int x);

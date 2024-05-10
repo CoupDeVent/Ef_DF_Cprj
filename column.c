@@ -130,7 +130,7 @@ void print_column(COLUMN* column){
     }
 }
 
-int number_occurence(COLUMN* column, int value){
+int number_occurence(COLUMN* column, void* value){
     /**
     * @brief: count occurence of a value
     * @param1: Pointer to a column
@@ -141,7 +141,7 @@ int number_occurence(COLUMN* column, int value){
     int occurence = 0;
 
     for(int i = 0; i < column->size; i++){
-        if(column->data[i] == value){
+        if(column->data[i] == &value){
             occurence++;
         }
     }
